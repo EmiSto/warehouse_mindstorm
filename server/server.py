@@ -18,9 +18,7 @@ socketio = SocketIO(app)
 status_dict = {}
 
 # An object to represent the warehouse
-startX = 0
-startY = 0
-wh = Warehouse(2,3)
+wh = Warehouse(4,4)
 
 #======================================================================
 # Server get any connect or disconnect request, then update the online 
@@ -36,6 +34,10 @@ def connect():
 def disconnect():
     for room_id in status_dict.keys():
         if room_id in rooms():
+            #Remove the robot from the warehouse map
+            x = status_dict[room_id]['robot_x_pos']
+            y = status_dict[room_id]['robot_y_pos']
+            wh.removeRobot(x,y)
             status_dict.pop(room_id)
             break
 
@@ -122,6 +124,7 @@ def robot_update_status(request):
     # Update the onlines dict and return to client
     join_room(robot_id)
 
+    #Remove robots current position from the warehouse map
     if(robot_status == 1):
         wh.removeRobot(robot_x_pos,robot_y_pos)
 
@@ -133,9 +136,10 @@ def robot_update_status(request):
         'robot_status': robot_status
     }
     
+    #Add robot at its position on the wharehouse map
     if(robot_status == 0):
         wh.addRobot(robot_x_pos,robot_y_pos)
-        #UPDATE BROWSER CLIENT ABOUT NEW POSITION
+        #TODO:UPDATE BROWSER CLIENT ABOUT NEW POSITION
 
     print('>>>>>>>>>>>>>>>>>>>>', status_dict)
     wh.showWarehouse()
