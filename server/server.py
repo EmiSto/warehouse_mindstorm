@@ -1,12 +1,14 @@
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO, emit, join_room, rooms
+from warehouse import Warehouse
+from robotClient import Robot
 import json
 
 # import redis
 # r = redis.Redis(host='localhost', port=6379, db=0)
 
 # Change this base on host ip network address
-host = '192.168.1.188'
+host = '130.243.223.214'
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -14,6 +16,11 @@ socketio = SocketIO(app)
 
 # Initial online dict, dictionary of robot and it's state
 status_dict = {}
+
+# An object to represent the warehouse
+startX = 0
+startY = 0
+wh = Warehouse(2,3)
 
 #======================================================================
 # Server get any connect or disconnect request, then update the online 
@@ -60,6 +67,7 @@ def client_command(request):
 # Server process the request from client and then send command to robot
 
 def server_robot_manual(command, robot_id):
+    '''
     if command == 'move_forward':
         request_object = {
             'command': 'move_forward'
@@ -84,7 +92,8 @@ def server_robot_manual(command, robot_id):
         request_object = {
             'command': 'drop'
         }
-    
+    '''
+    request_object = { 'command': command}
     emit('server_command_robot', request_object, room=robot_id)
 
 
@@ -107,19 +116,29 @@ def robot_update_status(request):
     robot_direction = request.get('robot_direction')
     robot_x_pos = request.get('robot_x_pos')
     robot_y_pos = request.get('robot_y_pos')
+    robot_payload = request.get('robot_payload')
     robot_status = request.get('robot_status')
 
     # Update the onlines dict and return to client
     join_room(robot_id)
 
+    if(robot_status == 1):
+        wh.removeRobot(robot_x_pos,robot_y_pos)
+
     status_dict[robot_id] = {
         'robot_direction': robot_direction,
         'robot_x_pos': robot_x_pos,
         'robot_y_pos': robot_y_pos,
+        'robot_payload': robot_payload,
         'robot_status': robot_status
     }
-    print('>>>>>>>>>>>>>>>>>>>>', status_dict)
+    
+    if(robot_status == 0):
+        wh.addRobot(robot_x_pos,robot_y_pos)
+        #UPDATE BROWSER CLIENT ABOUT NEW POSITION
 
+    print('>>>>>>>>>>>>>>>>>>>>', status_dict)
+    wh.showWarehouse()
     emit('server_update_status', status_dict, broadcast=True)
 
 #=======================================================================

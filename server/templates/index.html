@@ -27,7 +27,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         // Change this base on host ip network address 
-        var host = '192.168.1.188'
+        var host = '130.243.223.214'
         var socket = io.connect('http://'+host+':5000/');
         
         socket.on('connect', function() {
@@ -89,7 +89,7 @@
         });
 
         socket.on('server_update_status', function(data) {
-            console.log('server_update_status: '+data)
+            console.log('server_update_status: '+ data)
             msg = JSON.stringify(data);
             $('#online_robots').html(msg);
         });
