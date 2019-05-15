@@ -170,16 +170,18 @@ def command_robot(command):
         moveOutOfGreen()
         PIDControl()
         return 0, 0, 0
-    elif command == "turn_left":
+    elif command == "move_left":
         moveOutOfGreen()
         moveBackward()
         turn_degree(-92)
         return 0, 0, 0
-    elif command == "turn_right":
+    elif command == "move_right":
         moveOutOfGreen()
         moveForward()
         turn_degree(87)
         return 0, 0, 0
+    elif command == "turn_left":
+        
     elif command == "beep":
         sound.beep()
         return 0, 0, 0
