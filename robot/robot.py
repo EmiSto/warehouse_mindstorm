@@ -37,30 +37,19 @@ def get_robot_status():
     return response_object
 
 # updating status of the robot depending on the command
-# assuming move right and move left only turns the robot and does not move it
+# assuming move right and move left only turns the robot and does not move
 def update_robot_status(command):
     if(command == 'move_forward'):
-        if(robot['direction'] == 0):
-            robot['y'] += 1
-        elif(robot['direction'] == 1):
-            robot['x'] += 1
-        elif(robot['direction'] == 2):
-            robot['y'] -= 1
-        else:
-            robot['x'] -= 1
+        move()
     elif(command == 'move_backward'):
-        if(robot['direction'] == 0):
-            robot['y'] -= 1
-        elif(robot['direction'] == 1):
-            robot['x'] -= 1
-        elif(robot['direction'] == 2):
-            robot['y'] += 1
-        else:
-            robot['x'] += 1
+        robot['direction'] = (robot['direction'] - 2) % 4
+        move()
     elif(command == 'move_right'):
         robot['direction'] = (robot['direction'] + 1) % 4
+        move()
     elif(command == 'move_left'):
         robot['direction'] = (robot['direction'] - 1) % 4
+        move()
     elif(command == 'pick' and robot['payload'] == 0):
         robot['payload'] = 1
     elif(command == 'drop' and robot['payload'] == 1):
@@ -68,7 +57,15 @@ def update_robot_status(command):
     else:
         print("Something went wrong with update_status")
     
-
+def move():
+    if(robot['direction'] == 0):
+        robot['y'] += 1
+    elif(robot['direction'] == 1):
+        robot['x'] += 1
+    elif(robot['direction'] == 2):
+        robot['y'] -= 1
+    else:
+        robot['x'] -= 1
 
 @sio.on('connect')
 def on_connect():

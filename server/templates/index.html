@@ -34,6 +34,11 @@
                 <div id="robot"></div>
             </div>
     </nav>
+    <div>
+        <h1>Video Streaming Demonstration</h1>
+        <img src="https://www.sprakochfolkminnen.se/images/18.2f02a4561616a0a2e586e0e4/1529493977954/sl%C3%A5nb%C3%A4rpuff.jpg" id=camera>
+    </div>
+
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -166,6 +171,12 @@
             }
         }); 
 
+        //========CAMERA===============
+
+        socket.on('show img', function(img){
+            img = 'data:image/jpg;base64,' + img + '';
+            document.getElementById("camera").src = img;
+        });
     });
         
          //e.keyCode == 40
@@ -175,8 +186,6 @@
         //right = 39
         //down = 40 
 </script>
-
-
 
 </body>
 </html>

@@ -17,16 +17,16 @@ def handleConnect():
 def handleSend(tmp):
     while(True):
         # Capture frame-by-frame
-        ret, frame = cap.read()
+        _, frame = cap.read()
 
         #send frame to server
-        frame = cv2.imencode('.jpg', frame)[1].tobytes()
+        frame = cv2.imencode('.jpg', frame)[1].tostring()
         sio.emit('return frame', {'data': frame}, namespace='/camera')
 
         # Display the resulting frame
         #cv2.imshow('frame',frame)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
+        #if cv2.waitKey(1) & 0xFF == ord('q'):
+        #    break
 
 
 sio.connect('http://'+host+':5000/camera')

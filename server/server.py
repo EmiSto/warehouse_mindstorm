@@ -6,6 +6,7 @@ import json
 #CAMERA imports
 import numpy as np
 import cv2
+import base64
 
 # import redis
 # r = redis.Redis(host='localhost', port=6379, db=0)
@@ -154,7 +155,7 @@ def robot_update_status(request):
 
 #=======================================================================
 # Server takes request from camera client
-'''
+
 frame = None
 
 @socketio.on('connect', namespace = '/camera')
@@ -162,22 +163,26 @@ def handleCameraConnect():
     print('Camera connected')
     socketio.emit('send frame', namespace = '/camera')
 
-'''
+
 @socketio.on('return frame', namespace='/camera')
 def handleFrame(frame):
     print("=========frame got through----------")
+    frame = frame['data']
+    socketio.emit('show img', {'data' : frame})
+    frame = np.frombuffer(frame, np.uint8)
+    frame = cv2.imdecode(frame, 3)
 
+    bFrame = base64.b64encode(frame)
     cv2.imshow('frame', frame)
-'''
-@app.route('/camera')
-def handleRoute():
-    @socketio.on('return frame', namespace='/camera')
-    def handleFrame(frame):
-        print("=========frame got through----------")
-        frame =  Response(frame,
-			    mimetype='multipart/x-mixed-replace; boundary=frame')
-    return frame
-'''
+    cv2.waitKey(1)
+
+    socketio.emit('send img', {'data': bFrame})
+    #frame = (b'--frame\r\n'
+              # b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+    #Response(frame, mimetype='multipart/x-mixed-replace; boundary=frame')
+
+
+
 
 
 #======================================================================
