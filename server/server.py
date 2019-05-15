@@ -143,7 +143,7 @@ def robot_update_status(request):
     if(robot_status == 0):
         wh.addRobot(robot_x_pos,robot_y_pos)
         #TODO:UPDATE BROWSER CLIENT ABOUT NEW POSITION
-        socketio.emit('test', {'direction' : robot_direction})
+        socketio.emit('moveRobot', {'direction' : robot_direction})
 
     print('>>>>>>>>>>>>>>>>>>>>', status_dict)
     wh.showWarehouse()
