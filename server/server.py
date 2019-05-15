@@ -1,8 +1,11 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, Response
 from flask_socketio import SocketIO, emit, join_room, rooms
 from warehouse import Warehouse
-from robotClient import Robot
 import json
+
+#CAMERA imports
+import numpy as np
+import cv2
 
 # import redis
 # r = redis.Redis(host='localhost', port=6379, db=0)
@@ -140,12 +143,46 @@ def robot_update_status(request):
     if(robot_status == 0):
         wh.addRobot(robot_x_pos,robot_y_pos)
         #TODO:UPDATE BROWSER CLIENT ABOUT NEW POSITION
+        socketio.emit('test', {'direction' : robot_direction})
 
     print('>>>>>>>>>>>>>>>>>>>>', status_dict)
     wh.showWarehouse()
     emit('server_update_status', status_dict, broadcast=True)
 
 #=======================================================================
+
+
+#=======================================================================
+# Server takes request from camera client
+'''
+frame = None
+
+@socketio.on('connect', namespace = '/camera')
+def handleCameraConnect():
+    print('Camera connected')
+    socketio.emit('send frame', namespace = '/camera')
+
+'''
+@socketio.on('return frame', namespace='/camera')
+def handleFrame(frame):
+    print("=========frame got through----------")
+
+    cv2.imshow('frame', frame)
+'''
+@app.route('/camera')
+def handleRoute():
+    @socketio.on('return frame', namespace='/camera')
+    def handleFrame(frame):
+        print("=========frame got through----------")
+        frame =  Response(frame,
+			    mimetype='multipart/x-mixed-replace; boundary=frame')
+    return frame
+'''
+
+
+#======================================================================
+
+
 
 
 @app.route('/')
