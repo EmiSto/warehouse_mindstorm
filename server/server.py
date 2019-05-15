@@ -84,7 +84,14 @@ def server_robot_manual(command, robot_id):
         request_object = {
             'command': 'drop'
         }
-    
+    elif command == 'turn_right':
+        request_object = {
+            'command': 'turn_right'
+        }
+    elif command == 'turn_left':
+        request_object = {
+            'command': 'turn_left'
+        }
     emit('server_command_robot', request_object, room=robot_id)
 
 
