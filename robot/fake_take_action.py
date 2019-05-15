@@ -88,6 +88,18 @@ def command_robot(command):
     elif command == "beep":
         sound.beep()
         return True
+    elif command == "turn_right":
+        moveOutOfGreen()
+        moveForward()
+
+        turn_degree(87)       # turn right
+        return True
+    elif command == "turn_left":
+        moveOutOfGreen()
+        moveBackward()
+        
+        turn_degree(-92)    # turn left
+        return True
     return False
 
 
