@@ -168,12 +168,15 @@ def robot_update_status(request):
 
 frame = None
 
+#When camera client has connected server asks for images
 @socketio.on('connect', namespace = '/camera')
 def handleCameraConnect():
     print('Camera connected')
     socketio.emit('send frame', namespace = '/camera')
 
-
+#Client returns frames one at a time which server decodes
+# and shows
+#TODO: send the frame to the browser client
 @socketio.on('return frame', namespace='/camera')
 def handleFrame(frame):
     print("=========frame got through----------")
@@ -190,8 +193,6 @@ def handleFrame(frame):
     #frame = (b'--frame\r\n'
               # b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
     #Response(frame, mimetype='multipart/x-mixed-replace; boundary=frame')
-
-
 
 
 

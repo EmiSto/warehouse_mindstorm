@@ -47,9 +47,13 @@ def update_robot_status(command):
     elif(command == 'move_right'):
         robot['direction'] = (robot['direction'] + 1) % 4
         move()
+    elif(command == 'turn_right'):
+        robot['direction'] = (robot['direction'] + 1) % 4
     elif(command == 'move_left'):
         robot['direction'] = (robot['direction'] - 1) % 4
         move()
+    elif(command == 'turn_left'):
+        robot['direction'] = (robot['direction'] - 1) % 4
     elif(command == 'pick' and robot['payload'] == 0):
         robot['payload'] = 1
     elif(command == 'drop' and robot['payload'] == 1):
