@@ -54,4 +54,3 @@ $ python robot.py robot_id real
 * Represent the grid on the browser
 * Arduino - Server - Client
 * Auto controlling robot
-* Camera - Server - Client

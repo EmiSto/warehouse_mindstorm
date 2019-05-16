@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
 import socketio
+import time
 
 sio = socketio.Client()
 
@@ -19,14 +20,11 @@ def handleSend(tmp):
         # Capture frame-by-frame
         _, frame = cap.read()
 
-        #send frame to server
+        #send frame to server. First converts it into jpg then to string.
+        #sleeping to lessen the latency problem
         frame = cv2.imencode('.jpg', frame)[1].tostring()
+        time.sleep(0.5)
         sio.emit('return frame', {'data': frame})
-
-        # Display the resulting frame
-        #cv2.imshow('frame',frame)
-        #if cv2.waitKey(1) & 0xFF == ord('q'):
-        #    break
 
 
 sio.connect('http://'+host+':5000/camera')

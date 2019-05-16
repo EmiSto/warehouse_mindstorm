@@ -176,10 +176,12 @@
         socket.on('show img', function(img){
             
             var encodedImg = img['data'];
-            encodedImg = encodedImg.substring(2, encodedImg.length-1)
-            
+
+            //----------THIS LINE IS NEEDED FOR PYTHON 3-------------------
+            encodedImg = encodedImg.substring(2, encodedImg.length-32769)
+            //----------------------------------------------------
+            //Decode base64 imgage and set as new image
             var newImg = 'data:image/jpeg;base64,' + encodedImg;
-            console.log(newImg)
             document.getElementById("camera").src = newImg;
         });
     });
