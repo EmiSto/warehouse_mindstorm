@@ -4,6 +4,8 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+
+
 </head>
 <body>
     <div class="status">
@@ -11,24 +13,46 @@
         <div id="online_robots"></div>
     </div>
 
-    <div class="send_command">
-        <h3>Send command to robot</h3>
-        <input type="text" id="robot_id" placeholder="Enter robot id">
-        <div>
-            <button class="button" id="moveForward">Forward</button>
-            <button class="button" id="moveBackward">Backward</button>
-            <button class="button" id="turnRight">Right</button>
-            <button class="button" id="turnLeft">Left</button>
-            <button class="button" id="pick">Pick object</button>
-            <button class="button" id="drop">Drop object</button>
+    <nav>
+        <div class="send_command">
+            <h3>Send command to robot</h3>
+            <input type="text" id="robot_id" placeholder="Enter robot id">
+            <div>
+                <button class="button" id="moveForward">Forward</button>
+                <button class="button" id="moveBackward">Backward</button>
+                <button class="button" id="turnRight">Right</button>
+                <button class="button" id="turnLeft">Left</button>
+                <button class="button" id="pick">Pick object</button>
+                <button class="button" id="drop">Drop object</button>
+            </div>
         </div>
+    </nav>
+
+    <nav>
+         <h2>Grid of robot location</h2>
+            <div id="container">
+                <div id="robot"></div>
+            </div>
+    </nav>
+    <div>
+        <h1>Video Streaming Demonstration</h1>
+        <img src="https://www.sprakochfolkminnen.se/images/18.2f02a4561616a0a2e586e0e4/1529493977954/sl%C3%A5nb%C3%A4rpuff.jpg" id=camera>
     </div>
+
 
 <script type="text/javascript">
     $(document).ready(function() {
         // Change this base on host ip network address 
-        var host = '192.168.1.188'
+        var host = '130.243.223.214'
         var socket = io.connect('http://'+host+':5000/');
+
+        //building the grid with creategrid(x), where x is the amount of boxes in the row x column 
+        createGrid(4);
+
+        $(".newGrid").click(function() {
+            refreshGrid();
+
+        });
         
         socket.on('connect', function() {
             socket.send('User has connected!');
@@ -93,7 +117,75 @@
             msg = JSON.stringify(data);
             $('#online_robots').html(msg);
         });
+
+
+        
+         // function that builds a grid in the "container"
+    function createGrid(x) {
+        for (var rows = 0; rows < x; rows++) {
+            for (var columns = 0; columns < x; columns++) {
+                $("#container").append("<div class='grid'></div>");
+            };
+        };
+        $(".grid").width(250/x);
+        $(".grid").height(250/x);
+    };
+
+
+    //Move robot in the grid
+        var robot=document.getElementById('robot')
+        var container=document.getElementById('container');
+        var robotleft = 150;
+        var robottop = 425;
+
+        socket.on('moveRobot', function(e){
+            console.log("inne funktionen")
+            //e = direction. 0= forward, 1 = right, 2 = backward, 3 = left.
+
+            e = e['direction'];
+            
+            //left
+            if(e == 3){
+                robotleft -= 62,5;
+                robot.style.left = robotleft + 'px';
+
+            }
+            //up
+            if(e == 0){
+                robottop -= 62,5;
+                robot.style.top = robottop + 'px';
+
+            }
+            //right
+            if(e == 1){
+                console.log("inne i höger")
+                robotleft += 62,5;
+                robot.style.left = robotleft + 'px';
+
+            }
+
+            //down
+            if(e == 2){
+                robottop += 62,5;
+                robot.style.top = robottop + 'px';
+            }
+        }); 
+
+        //========CAMERA===============
+
+        socket.on('show img', function(img){
+            img = 'data:image/jpg;base64,' + img + '';
+            document.getElementById("camera").src = img;
+        });
     });
+        
+         //e.keyCode == 40
+        //document.onkeydown = move;      
+        //left = 37
+        //up = 38
+        //right = 39
+        //down = 40 
 </script>
+
 </body>
 </html>

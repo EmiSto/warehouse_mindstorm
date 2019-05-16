@@ -50,6 +50,8 @@ $ python robot.py robot_id real
 
 ### Todo
 
-* Update robot's direction, x position, y position after each manual controlling
+* Make sure robot can't move outside grid or into another robot
+* Represent the grid on the browser
+* Arduino - Server - Client
 * Auto controlling robot
 * Camera - Server - Client
