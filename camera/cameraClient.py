@@ -9,7 +9,7 @@ host = '130.243.223.214'
 
 cap = cv2.VideoCapture(0)
 
-@sio.on('connect', namespace='/camera')
+@sio.on('connect', namespace = '/camera')
 def handleConnect():
     print('Camera connection established')
 
@@ -21,7 +21,7 @@ def handleSend(tmp):
 
         #send frame to server
         frame = cv2.imencode('.jpg', frame)[1].tostring()
-        sio.emit('return frame', {'data': frame}, namespace='/camera')
+        sio.emit('return frame', {'data': frame})
 
         # Display the resulting frame
         #cv2.imshow('frame',frame)

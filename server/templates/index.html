@@ -174,8 +174,13 @@
         //========CAMERA===============
 
         socket.on('show img', function(img){
-            img = 'data:image/jpg;base64,' + img + '';
-            document.getElementById("camera").src = img;
+            
+            var encodedImg = img['data'];
+            encodedImg = encodedImg.substring(2, encodedImg.length-1)
+            
+            var newImg = 'data:image/jpeg;base64,' + encodedImg;
+            console.log(newImg)
+            document.getElementById("camera").src = newImg;
         });
     });
         
