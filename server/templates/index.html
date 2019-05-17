@@ -43,8 +43,9 @@
 <script type="text/javascript">
     $(document).ready(function() {
         // Change this base on host ip network address 
-        var host = '130.243.223.214'
+        var host = '130.243.234.142'
         var socket = io.connect('http://'+host+':5000/');
+        var cam_socket = io.connect('http://'+host+':5000/camera')
 
         //building the grid with creategrid(x), where x is the amount of boxes in the row x column 
         createGrid(4);
@@ -173,9 +174,16 @@
 
         //========CAMERA===============
 
-        socket.on('show img', function(img){
-            img = 'data:image/jpg;base64,' + img + '';
-            document.getElementById("camera").src = img;
+        cam_socket.on('show img', function(img){
+            
+            var encodedImg = img['data'];
+
+            //----------THIS LINE IS NEEDED FOR PYTHON 3-------------------
+            encodedImg = encodedImg.substring(2, encodedImg.length-1)
+            //----------------------------------------------------
+            //Decode base64 imgage and set as new image
+            var newImg = 'data:image/jpeg;base64,' + encodedImg;
+            document.getElementById("camera").src = newImg;
         });
     });
         

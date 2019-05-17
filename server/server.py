@@ -12,7 +12,7 @@ import base64
 # r = redis.Redis(host='localhost', port=6379, db=0)
 
 # Change this base on host ip network address
-host = '130.243.223.214'
+host = '130.243.234.142'
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -177,23 +177,32 @@ def handleCameraConnect():
 #Client returns frames one at a time which server decodes
 # and shows
 #TODO: send the frame to the browser client
-@socketio.on('return frame', namespace='/camera')
+@socketio.on('return frame')
 def handleFrame(frame):
     print("=========frame got through----------")
     frame = frame['data']
-    socketio.emit('show img', {'data' : frame})
+    
     frame = np.frombuffer(frame, np.uint8)
-    frame = cv2.imdecode(frame, 3)
-
     bFrame = base64.b64encode(frame)
-    cv2.imshow('frame', frame)
-    cv2.waitKey(1)
+    socketio.emit('show img', {'data' : str(bFrame)}, namespace ='/camera')
+    
+ 
+    #frame = cv2.imdecode(frame, 3)
+'''
+@app.route('/camera')
+def handleCamera():
+    if(frame is None):
+        return
+    else:
 
-    socketio.emit('send img', {'data': bFrame})
-    #frame = (b'--frame\r\n'
-              # b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-    #Response(frame, mimetype='multipart/x-mixed-replace; boundary=frame')
+    
+    #cv2.imshow('frame', frame)
+    #cv2.waitKey(1)
 
+        frame = (b'--frame\r\n'
+                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+        Response(frame, mimetype='multipart/x-mixed-replace; boundary=frame')
+'''
 
 
 #======================================================================
