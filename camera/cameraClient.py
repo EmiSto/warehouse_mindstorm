@@ -23,7 +23,7 @@ def handleSend(tmp):
         #send frame to server. First converts it into jpg then to string.
         #sleeping to lessen the latency problem
         frame = cv2.imencode('.jpg', frame)[1].tostring()
-        time.sleep(0.5)
+        #time.sleep(0.5)
         sio.emit('return frame', {'data': frame})
 
 

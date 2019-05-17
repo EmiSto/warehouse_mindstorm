@@ -179,7 +179,7 @@
             var encodedImg = img['data'];
 
             //----------THIS LINE IS NEEDED FOR PYTHON 3-------------------
-            encodedImg = encodedImg.substring(2, encodedImg.length-32769)
+            encodedImg = encodedImg.substring(2, encodedImg.length-1)
             //----------------------------------------------------
             //Decode base64 imgage and set as new image
             var newImg = 'data:image/jpeg;base64,' + encodedImg;
