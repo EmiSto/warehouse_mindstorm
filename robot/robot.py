@@ -5,7 +5,7 @@ import json
 sio = socketio.Client()
 
 # Change this base on host ip network address 
-host = '130.243.223.214'
+host = '130.243.234.142'
 
 robot = {}
 robot['id'] = sys.argv[1]   # unique robot id

@@ -6,7 +6,7 @@ import time
 sio = socketio.Client()
 
 #Change this base on host ip network address
-host = '130.243.223.214'
+host = '130.243.234.142'
 
 cap = cv2.VideoCapture(0)
 

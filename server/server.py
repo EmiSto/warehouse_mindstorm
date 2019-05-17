@@ -12,7 +12,7 @@ import base64
 # r = redis.Redis(host='localhost', port=6379, db=0)
 
 # Change this base on host ip network address
-host = '130.243.223.214'
+host = '130.243.234.142'
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -184,7 +184,7 @@ def handleFrame(frame):
     
     frame = np.frombuffer(frame, np.uint8)
     bFrame = base64.b64encode(frame)
-    socketio.emit('show img', {'data' : str(bFrame)})
+    socketio.emit('show img', {'data' : str(bFrame)}, namespace ='/camera')
     
  
     #frame = cv2.imdecode(frame, 3)
